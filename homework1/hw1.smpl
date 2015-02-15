@@ -1,0 +1,36 @@
+	Sample Problem and Solution for Homework #1
+
+PROBLEM:
+ thr in thr_low thr_high out
+
+Function "thr" reads the input image from file "in" and thresholds it
+according to the following rule:
+
+	  0	when	   0     <= v_in < thr_low
+v_out =  128	when	thr_low  <= v_in < thr_high	
+	 255	when	thr_high <= v+in < 256
+
+The thresholded image is stored in file "out". Note that ordinary
+bilevel thresholding is achieved by setting thr_low = thr_high.
+
+SOLUTION:
+ See file thr.c for the solution. To compile it, type
+"make thr". This will compile thr.c and IPutil.c, a
+file of utility functions that you will need for image
+input/output operations and memory allocation.
+
+In general, all programs will use main() to collect
+user parameters and pass them onto the function that
+will operate on them. The name of that function is identical
+to that of the calling program, i.e., "thr" in this example.
+There is also close correspondence between the names of the
+arguments as well. As a result, we invoke the function as:
+thr(I1, thr_low, thr_high, I2)
+Note the close correspondence between the specification of
+this problem and the manner in which the function is called.
+It is important to note that images are passed to and from
+functions via the image data structure.
+Images are read into the data structure from a file by using
+the IP_readImage() function. They are saved from a data structure
+to a file via the IP_saveImage() function.
+
