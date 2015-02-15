@@ -7,6 +7,7 @@
 # by changing the ALL variable, and each of the target names
 #
 #
+
 CC  = g++   # Use gcc compiler. Use g++ for C++ compilation.
 CFLAGS  =   # Compiler flags: -g for debug, -O for optimization
 LDFLAGS =   # Linker flags

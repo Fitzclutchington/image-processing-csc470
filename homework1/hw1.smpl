@@ -8,7 +8,7 @@ according to the following rule:
 
 	       0	when	   0     <= v_in < thr_low
 v_out =  128	when	thr_low  <= v_in < thr_high	
-	     255	when	thr_high <= v+in < 256
+	     255	when	thr_high <= v_in < 256
 
 The thresholded image is stored in file "out". Note that ordinary
 bilevel thresholding is achieved by setting thr_low = thr_high.

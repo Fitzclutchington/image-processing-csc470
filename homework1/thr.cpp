@@ -1,4 +1,3 @@
-
 // ================================================================
 // thr.c - Threshold program.
 // Copyright (C) 2012 by George Wolberg
@@ -35,7 +34,7 @@ main(int argc, char** argv)
 	I2 = NEWIMAGE;
 
 	// read lower and upper thresholds
-	thr_low  = atoi(argv[2]);
+	thr_low  = atoi(argv[2]); //atoi converts strings to numbers
 	thr_high = atoi(argv[3]);
 
 	// threshold image and save result in file
@@ -66,7 +65,7 @@ void
 thr(imageP I1, int thr_low, int thr_high, imageP I2)
 {
 	int	 i, total;
-	uchar	*in, *out, lut[256];
+	uchar	*in, *out, lut[256]; //lut is an array of size 256
 
 	// total number of pixels in image
 	total = I1->width * I1->height;

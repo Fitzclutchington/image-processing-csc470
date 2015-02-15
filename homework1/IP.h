@@ -33,8 +33,8 @@ typedef unsigned char   uchar;
 
 typedef struct {    /* image data structure  */
     int width;  /* image width  (# cols) */
-        int height; /* image height (# rows) */
-            uchar *image;   /* pointer to image data */
+    int height; /* image height (# rows) */
+    uchar *image;   /* pointer to image data */
 } imageS, *imageP;
 
 extern imageP   IP_readImage    (char *);
