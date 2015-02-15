@@ -36,9 +36,9 @@ histmatch: $($@.o) IPutil.o
 
 # Clean target to remove backup, object, and core files
 clean:
-    rm -f *~ *.o core
-    cleanx:
-        rm -f *~ *.o core $(ALL)
+	rm -f *~ *.o core
+	cleanx:
+		rm -f *~ *.o core $(ALL)
 
 # Dependencies
 IPutil.o:   IP.h
