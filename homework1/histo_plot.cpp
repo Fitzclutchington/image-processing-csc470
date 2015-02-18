@@ -10,7 +10,7 @@ using namespace std;
 
 // function prototype
 void histo_plot(imageP, imageP, bool);
-
+void create_histogram(imageP, float, *int);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
 //
@@ -66,7 +66,8 @@ main(int argc, char** argv)
 void
 histo_plot(imageP I1, imageP I2, bool flg)
 {
-	int	 i, x,y, total, hist_size, hist_val, histogram[256];
+	int	 i, total, hist_size, hist_val, histogram[256];
+	float scale, Havg;
 	uchar	*in, *out; 
 
 	// total number of pixels in image and total pixels in histogram
@@ -82,18 +83,32 @@ histo_plot(imageP I1, imageP I2, bool flg)
 		exit(1);
 	}
 
+	//calculate Havg
+	Havg = (I2->width*I2->height)/MXGRAY;
+
 	// init lookup table ()
 	for(i=0; i<MXGRAY ; i++) 
 		histogram[i] = 0;
 
 	// visit all input pixels and add 1 to it's corresponding bin
 	in  = I1->image;	// input  image buffer
-	out = I2->image;	// output image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
 	//create histogram
+	if(flg == 0){
+		scale = 128 / Havg;
+		create_histogram(I2, scale, *histogram);
+	}
+}
+
+
+void
+create_histogram(imageP I2, float scale, int histogram[])
+{
+	int x,y, histval;
+	out = I2->image;	// output image buffer
 	for(x=0; x<I2->width; x++){
-		hist_val = histogram[x];
+		hist_val = (int) (scale * histogram[x]);
 
 		//make entire column white
 		if(hist_val >= I2->height){
@@ -110,7 +125,4 @@ histo_plot(imageP I1, imageP I2, bool flg)
 			
 		}
 	}
-
-
 }
-
