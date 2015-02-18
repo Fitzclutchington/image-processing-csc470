@@ -1,5 +1,5 @@
 // ================================================================
-// qntz.cpp - Quantiation program.
+// qntz.cpp - Quantization program.
 //
 // Written by: Andrew Fitzgerald, 2015
 // =====================================================================

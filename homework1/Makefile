@@ -24,7 +24,7 @@ LIBS    = -lm   # Libraries to link with (-lm is the math library)
 COMPILE_EXECUTABLE = $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $? $(LIBS)
 
 # These are all the files to be compiled.
-ALL = thr qntz histeq histmatch
+ALL = thr qntz histo_plot histeq histmatch
 
 all:    $(ALL)
 
@@ -37,6 +37,7 @@ histeq: $($@.o) IPutil.o
 
 histmatch: $($@.o) IPutil.o
 
+histo_plot: $($@.o) IPutil.o
 # Clean target to remove backup, object, and core files
 clean:
 	rm -f *~ *.o core
@@ -46,6 +47,7 @@ clean:
 # Dependencies
 IPutil.o:   IP.h
 thr.o:      IP.h
+histo_plot.o: IP.h
 histeq.o:   IP.h
 histmatch.o:    IP.h
 qntz.o:      IP.h
