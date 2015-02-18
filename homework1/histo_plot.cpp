@@ -66,8 +66,8 @@ main(int argc, char** argv)
 void
 histo_plot(imageP I1, imageP I2, bool flg)
 {
-	int	 i, total, hist_size, histogram[256];
-	uchar	*in, *out; //lut is an array of size 256
+	int	 i, x,y, total, hist_size, hist_val, histogram[256];
+	uchar	*in, *out; 
 
 	// total number of pixels in image and total pixels in histogram
 	total = I1->width * I1->height;
@@ -86,11 +86,31 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	for(i=0; i<MXGRAY ; i++) 
 		histogram[i] = 0;
 
-	// visit all input pixels and apply lut to quantization
+	// visit all input pixels and add 1 to it's corresponding bin
 	in  = I1->image;	// input  image buffer
 	out = I2->image;	// output image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
-	for(i=0; i<MXGRAY; i++) cout<< histogram[i] << endl;
+	//create histogram
+	for(x=0; x<I2->width; x++){
+		hist_val = histogram[x];
+
+		//make entire column white
+		if(hist_val >= I2->height){
+			for(y=0; y<I2->height; y++){
+				out[x + MXGRAY * y] = MaxGray;
+			}
+		}
+
+		else{
+			for(y=0; y<hist_val; y++)
+				out[x + MXGRAY * y] = MaxGray;
+			for(;y<I2->height; y++)
+				out[x + MXGRAY * y] = BLACK;
+			
+		}
+	}
+
+
 }
 

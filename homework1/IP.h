@@ -15,6 +15,7 @@
 
 #define MaxGray     255
 #define MXGRAY      256
+#define BLACK         0
 #define NEWIMAGE    ((imageP) malloc(sizeof(imageS)))
 
 /* useful macros */
