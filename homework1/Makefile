@@ -24,12 +24,14 @@ LIBS    = -lm   # Libraries to link with (-lm is the math library)
 COMPILE_EXECUTABLE = $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $? $(LIBS)
 
 # These are all the files to be compiled.
-ALL = thr histeq histmatch
+ALL = thr qntz histeq histmatch
 
 all:    $(ALL)
 
 # List of executable targets
 thr:    $($@.o) IPutil.o
+
+qntz:  $($@.o) IPutil.o
 
 histeq: $($@.o) IPutil.o
 
@@ -46,3 +48,4 @@ IPutil.o:   IP.h
 thr.o:      IP.h
 histeq.o:   IP.h
 histmatch.o:    IP.h
+qntz.o:      IP.h
