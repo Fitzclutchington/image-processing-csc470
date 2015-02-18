@@ -98,15 +98,15 @@ histo_plot(imageP I1, imageP I2, bool flg)
 		//make entire column white
 		if(hist_val >= I2->height){
 			for(y=0; y<I2->height; y++){
-				out[x + MXGRAY * y] = MaxGray;
+				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
 			}
 		}
 
 		else{
 			for(y=0; y<hist_val; y++)
-				out[x + MXGRAY * y] = MaxGray;
+				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
 			for(;y<I2->height; y++)
-				out[x + MXGRAY * y] = BLACK;
+				out[x + I2->width * (I2->width - y - 1)] = BLACK;
 			
 		}
 	}
