@@ -110,7 +110,7 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	}
 
 	//calculate Havg
-	Havg = (I2->width*I2->height)/MXGRAY;
+	Havg = (I1->width*I1->height)/MXGRAY;
 
 	// init lookup table ()
 	for(i=0; i<MXGRAY ; i++) 
