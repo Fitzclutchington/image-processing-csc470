@@ -9,8 +9,9 @@
 using namespace std;
 
 // function prototype
+void create_histogram(imageP, float, int);
 void histo_plot(imageP, imageP, bool);
-void create_histogram(imageP, float, *int);
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
 //
@@ -50,6 +51,31 @@ main(int argc, char** argv)
 	return 1;
 }
 
+void
+create_histogram(imageP I2, float scale, int histogram[])
+{
+	int x,y, hist_val;
+	uchar *out;
+	out = I2->image;	// output image buffer
+	for(x=0; x<I2->width; x++){
+		hist_val = (int) (scale * histogram[x]);
+
+		//make entire column white
+		if(hist_val >= I2->height){
+			for(y=0; y<I2->height; y++){
+				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
+			}
+		}
+
+		else{
+			for(y=0; y<hist_val; y++)
+				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
+			for(;y<I2->height; y++)
+				out[x + I2->width * (I2->width - y - 1)] = BLACK;
+			
+		}
+	}
+}
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,32 +123,8 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	//create histogram
 	if(flg == 0){
 		scale = 128 / Havg;
-		create_histogram(I2, scale, *histogram);
+		create_histogram(I2, scale, histogram);
 	}
 }
 
 
-void
-create_histogram(imageP I2, float scale, int histogram[])
-{
-	int x,y, histval;
-	out = I2->image;	// output image buffer
-	for(x=0; x<I2->width; x++){
-		hist_val = (int) (scale * histogram[x]);
-
-		//make entire column white
-		if(hist_val >= I2->height){
-			for(y=0; y<I2->height; y++){
-				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
-			}
-		}
-
-		else{
-			for(y=0; y<hist_val; y++)
-				out[x + I2->width * (I2->width - y - 1)] = MaxGray;
-			for(;y<I2->height; y++)
-				out[x + I2->width * (I2->width - y - 1)] = BLACK;
-			
-		}
-	}
-}

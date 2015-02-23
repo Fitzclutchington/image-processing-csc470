@@ -63,7 +63,7 @@ main(int argc, char** argv)
 void
 qntz(imageP I1, int levels, imageP I2)
 {
-	int	 i, total, scale;
+	int	 i, total, scale, midpoint;
 	uchar	*in, *out, lut[256]; //lut is an array of size 256
 
 	// total number of pixels in image
@@ -78,10 +78,11 @@ qntz(imageP I1, int levels, imageP I2)
 		exit(1);
 	}
 
-	// init lookup table ()
+	// init lookup table (), midpoint is a shift to have levels biased at 128
 	scale = MXGRAY / levels;
+	midpoint = scale / 2;
 	for(i=0; i<MXGRAY ; i++) 
-		lut[i] = scale * (int) (i/scale);
+		lut[i] = scale * (int) (i/scale) + midpoint;
 
 	// visit all input pixels and apply lut to quantization
 	in  = I1->image;	// input  image buffer
