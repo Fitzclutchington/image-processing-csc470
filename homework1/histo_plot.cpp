@@ -5,7 +5,7 @@
 // =====================================================================
 
 #include "IP.h"
-
+#include <algorithm>
 using namespace std;
 
 // function prototype
@@ -94,7 +94,7 @@ histo_plot(imageP I1, imageP I2, bool flg)
 {
 	int	 i, total, hist_size, hist_val, histogram[256];
 	float scale, Havg;
-	uchar	*in, *out; 
+	uchar	*in, *out, max; 
 
 	// total number of pixels in image and total pixels in histogram
 	total = I1->width * I1->height;
@@ -120,9 +120,17 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
+	//max = maximum bin
+	max = *std::max_element(histogram, histogram+MXGRAY);
+  
 	//create histogram
 	if(flg == 0){
 		scale = 128 / Havg;
+		create_histogram(I2, scale, histogram);
+	}
+
+	if(flg == 1){
+		scale = 255 / max;
 		create_histogram(I2, scale, histogram);
 	}
 }
