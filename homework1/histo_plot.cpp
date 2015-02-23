@@ -34,7 +34,7 @@ main(int argc, char** argv)
 	I2 = NEWIMAGE;
 
 	// read and ensure flag is corrent
-	flg  = atoi(argv[2]); //atoi converts strings to numbers
+	flg  = atoi(argv[3]); //atoi converts strings to numbers
 	if(flg != 0 and flg != 1){
 		cerr << "Usage: flag must be 0 or 1\n";
 		exit(1);
@@ -51,6 +51,11 @@ main(int argc, char** argv)
 	return 1;
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// create_histogram:
+//
+// Function create_histogram plots histogram values based off the scale to image I2
+
 void
 create_histogram(imageP I2, float scale, int histogram[])
 {
@@ -59,7 +64,7 @@ create_histogram(imageP I2, float scale, int histogram[])
 	out = I2->image;	// output image buffer
 	for(x=0; x<I2->width; x++){
 		hist_val = (int) (scale * histogram[x]);
-
+	
 		//make entire column white
 		if(hist_val >= I2->height){
 			for(y=0; y<I2->height; y++){
@@ -92,10 +97,10 @@ create_histogram(imageP I2, float scale, int histogram[])
 void
 histo_plot(imageP I1, imageP I2, bool flg)
 {
-	int	 i, total, hist_size, hist_val, histogram[256];
+	int	 i, total, hist_size, hist_val, histogram[256],  max;
 	float scale, Havg;
-	uchar	*in, *out, max; 
-
+	uchar	*in, *out; 
+    
 	// total number of pixels in image and total pixels in histogram
 	total = I1->width * I1->height;
 	hist_size = MXGRAY * MXGRAY;
@@ -120,17 +125,19 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
+	//for(i=0; i<MXGRAY; i++) cout << histogram[i]<<endl;
 	//max = maximum bin
 	max = *std::max_element(histogram, histogram+MXGRAY);
-  
+    //cout << max;
+
 	//create histogram
 	if(flg == 0){
-		scale = 128 / Havg;
+		scale = 128.0 / Havg;
 		create_histogram(I2, scale, histogram);
 	}
 
 	if(flg == 1){
-		scale = 255 / max;
+		scale = 255.0 / max;
 		create_histogram(I2, scale, histogram);
 	}
 }
