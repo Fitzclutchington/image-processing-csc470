@@ -5,17 +5,15 @@
 // =====================================================================
 
 #include "IP.h"
-#include <algorithm>
 using namespace std;
 
 // function prototype
-void create_histogram(imageP, float, int);
 void histo_match(imageP, imageP, bool);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
 //
-// Main routine to quantize  image.
+// Main routine to perform histogram matching
 //
 int
 main(int argc, char** argv)
