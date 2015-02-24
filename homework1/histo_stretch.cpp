@@ -61,8 +61,8 @@ main(int argc, char** argv)
 void
 histo_stretch(imageP I1, int t1, int t2, imageP I2)
 {
-	int	 i, total, hist_size, histogram[256];
-	uchar	*in, *out; 
+	int	 i, total, histogram[256];
+	uchar	*in, *out, lut[256]; 
     
 	// total number of pixels in image and total pixels in histogram
 	total = I1->width * I1->height;
@@ -84,9 +84,15 @@ histo_stretch(imageP I1, int t1, int t2, imageP I2)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
-	//scale histogram according to t1 and t2
+	cerr << "you're ok";
+	//init lookup table
 	for(i=0; i<MXGRAY; i++){
-		histogram[i] = (int) MaxGray * (histogram[i] - t1) / (t2 - t1);
+		if(i < t1) lut[i] = 0;
+		if(i > t2) lut[i] = 255;
+		else lut[i] = (int) MaxGray * (i - t1) / (t2 -t1);
 	}
-	
+
+	in  = I1->image;	// input  image buffer
+	out = I2->image;	// output image buffer
+	for(i=0; i<total; i++) out[i] = lut[ in[i] ];
 }
