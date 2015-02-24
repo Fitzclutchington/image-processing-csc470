@@ -1,5 +1,5 @@
 // ================================================================
-// histo_stretch.cpp - Histogram stretching program.
+// histo_match.cpp - Histogram matching program.
 //
 // Written by: Andrew Fitzgerald, 2015
 // =====================================================================
@@ -10,7 +10,7 @@ using namespace std;
 
 // function prototype
 void create_histogram(imageP, float, int);
-void histo_plot(imageP, imageP, bool);
+void histo_match(imageP, imageP, bool);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
@@ -42,7 +42,7 @@ main(int argc, char** argv)
 	}
 
 	// quantize image and save result in file
-	histo_stretch(I1, t1,I2);
+	histo_stretcn(I1, t1, t2, I2);
 	IP_saveImage(I2, argv[4]);
 
 	// free up image structures/memory
