@@ -97,7 +97,7 @@ create_histogram(imageP I2, float scale, int histogram[])
 void
 histo_plot(imageP I1, imageP I2, bool flg)
 {
-	int	 i, total, hist_size, hist_val, histogram[256],  max;
+	int	 i, total, hist_size, hist_val, histogram[256],  hist_max;
 	float scale, Havg;
 	uchar	*in, *out; 
     
@@ -125,10 +125,14 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
-	//for(i=0; i<MXGRAY; i++) cout << histogram[i]<<endl;
-	//max = maximum bin
-	max = *std::max_element(histogram, histogram+MXGRAY);
-    //cout << max;
+	// Determine gray level with most pixels
+	hist_max = 0;
+	for(i=0; i<MXGRAY; i++){
+		if (histogram[i] > hist_max){
+			hist_max = histogram[i];
+		}
+	}
+	
 
 	//create histogram
 	if(flg == 0){
@@ -137,7 +141,7 @@ histo_plot(imageP I1, imageP I2, bool flg)
 	}
 
 	if(flg == 1){
-		scale = 255.0 / max;
+		scale = 255.0 / hist_max;
 		create_histogram(I2, scale, histogram);
 	}
 }

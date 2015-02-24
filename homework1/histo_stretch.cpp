@@ -5,22 +5,20 @@
 // =====================================================================
 
 #include "IP.h"
-#include <algorithm>
 using namespace std;
 
 // function prototype
-void create_histogram(imageP, float, int);
-void histo_plot(imageP, imageP, bool);
+void histo_stretch(imageP, int, int, imageP);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
 //
-// Main routine to quantize  image.
+// Main routine to stretch the histogram of an image.
 //
 int
 main(int argc, char** argv)
 {
-	bool flg;
+	int t1, t2;
 	imageP	I1, I2;
 
 	// error checking: proper usage
@@ -36,13 +34,10 @@ main(int argc, char** argv)
 	// read and ensure flag is corrent
 	t1 = atoi(argv[2]); //atoi converts strings to numbers
 	t2 = atoi(argv[3]);
-	if(flg != 0 and flg != 1){
-		cerr << "Usage: flag must be 0 or 1\n";
-		exit(1);
-	}
+	
 
 	// quantize image and save result in file
-	histo_stretch(I1, t1,I2);
+	histo_stretch(I1, t1, t2, I2);
 	IP_saveImage(I2, argv[4]);
 
 	// free up image structures/memory
@@ -50,4 +45,41 @@ main(int argc, char** argv)
 	IP_freeImage(I2);
 
 	return 1;
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// histo_stretch:
+//
+// Function histo_stretch stretches the dynamic range of the input image in file
+// in to fill the entire [0,255] range. The range that is stretched spans from
+// t1 to t2
+//
+
+void
+histo_stretch(imageP I1, int t1, int t2, imageP I2)
+{
+	int	 i, total, hist_size, histogram[256];
+	uchar	*in, *out; 
+    
+	// total number of pixels in image and total pixels in histogram
+	total = I1->width * I1->height;
+
+	// init I2 dimensions and buffer
+	I2->width  = I1->width;
+	I2->height = I1->height;
+	I2->image  = (uchar *) malloc(total);
+	if(I2->image == NULL) {
+		cerr << "histo_stretch: Insufficient memory\n";
+		exit(1);
+	}
+
+	
+
+	// init lookup table ()
+	for(i=0; i<MXGRAY ; i++) 
+		histogram[i] = 0;
+
+	// visit all input pixels and add 1 to it's corresponding bin
+	in  = I1->image;	// input  image buffer
+	for(i=0; i<total; i++) histogram[in[i]]++ ;
 }
