@@ -3,3 +3,6 @@
 *.o
 thr
 qtz
+xip
+histo_plot
+histo_stretch
