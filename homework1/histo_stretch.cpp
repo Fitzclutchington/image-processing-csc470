@@ -34,7 +34,10 @@ main(int argc, char** argv)
 	// read and ensure flag is corrent
 	t1 = atoi(argv[2]); //atoi converts strings to numbers
 	t2 = atoi(argv[3]);
-	
+	if(t1 == t2){
+		cerr << "Your boundaries cannot be the same number";
+		exit(1);
+	}
 
 	// quantize image and save result in file
 	histo_stretch(I1, t1, t2, I2);
@@ -73,13 +76,17 @@ histo_stretch(imageP I1, int t1, int t2, imageP I2)
 		exit(1);
 	}
 
-	
-
-	// init lookup table ()
+	// init histogram
 	for(i=0; i<MXGRAY ; i++) 
 		histogram[i] = 0;
 
 	// visit all input pixels and add 1 to it's corresponding bin
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
+
+	//scale histogram according to t1 and t2
+	for(i=0; i<MXGRAY; i++){
+		histogram[i] = (int) MaxGray * (histogram[i] - t1) / (t2 - t1);
+	}
+	
 }
