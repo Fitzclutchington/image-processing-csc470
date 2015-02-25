@@ -57,8 +57,8 @@ void
 threshold_Otsu(imageP I1, imageP I2)
 {
 	int	 i, total, ideal_k;
-	float histogram[256], total_mean, total_variance, class0_prob, denominator, numerator;
-	uchar	*in, *out; 
+	float histogram[256], total_mean, denominator, numerator, max_within, class0_prob, class0_mean;
+	uchar	*in, *out, lut[256]; 
     
 	// total number of pixels in image and total pixels in histogram
 	total = I1->width * I1->height;
@@ -86,14 +86,40 @@ threshold_Otsu(imageP I1, imageP I2)
 
 	//compute mean, from: equation (1)
 	total_mean = 0;
-	for(i=0; i<MXGRAY; i++) total_mean += (i *histogram[i]);
+	for(i=0; i<MXGRAY; i++) total_mean += ((i+1) *histogram[i]);
+    
+    max_within = 0;
 
     // compute ideal gray level for thresholding
     for(i=0; i<MXGRAY;i++){
     	
     	class0_prob = 0;
-    	for(int j = 0; j<=i; j++) class0_prob += histogram[j];
+    	for(int j = 0; j<=i; j++){ 
+    		
+    		class0_prob += histogram[j];}
     	
-    	
+    	class0_mean = 0;
+        for(int j = 0; j<=i; j++) class0_mean += ((j+1) * histogram[j]);
+        class0_mean /= class0_prob;
+
+        numerator = (total_mean*class0_prob - class0_mean) * (total_mean*class0_prob - class0_mean);
+        denominator = (class0_prob * (1 - class0_prob));
+
+        float temp = numerator/denominator;
+        
+        if(temp > max_within){
+        	max_within = temp;
+        	ideal_k = i;
+        }
+      
     }
+
+    
+    for(i=0; i<ideal_k ; i++) lut[i] = 0;
+	for(   ; i<MXGRAY;      i++) lut[i] = 255;
+
+	// visit all input pixels and apply lut to threshold
+	in  = I1->image;	// input  image buffer
+	out = I2->image;	// output image buffer
+	for(i=0; i<total; i++) out[i] = lut[ in[i] ];
 }
