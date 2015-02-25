@@ -2,10 +2,10 @@
 // histo_plot.cpp - Histogram program.
 //
 // Written by: Andrew Fitzgerald, 2015
+//			   James Chou
 // =====================================================================
 
 #include "IP.h"
-#include <algorithm>
 using namespace std;
 
 // function prototype
