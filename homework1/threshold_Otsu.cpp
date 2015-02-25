@@ -56,8 +56,8 @@ main(int argc, char** argv)
 void
 threshold_Otsu(imageP I1, imageP I2)
 {
-	int	 i, total;
-	float scale, histogram[256], total_mean, total_variance;
+	int	 i, total, ideal_k;
+	float histogram[256], total_mean, total_variance, class0_prob, denominator, numerator;
 	uchar	*in, *out; 
     
 	// total number of pixels in image and total pixels in histogram
@@ -81,14 +81,19 @@ threshold_Otsu(imageP I1, imageP I2)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
-	// normalize histogram, from equation (1)
+	// normalize histogram, from equation (15)
 	for(i=0; i<MXGRAY; i++) histogram[i] /= total;
 
 	//compute mean, from: equation (1)
 	total_mean = 0;
 	for(i=0; i<MXGRAY; i++) total_mean += (i *histogram[i]);
 
-	// compute total variance, from: equation (15)
-	total_variance = 0;
-    for(i=0; i<MXGRAY; i++) total_variance += ((i-total_mean)*(i-total_mean)*histogram[i]);
+    // compute ideal gray level for thresholding
+    for(i=0; i<MXGRAY;i++){
+    	
+    	class0_prob = 0;
+    	for(int j = 0; j<=i; j++) class0_prob += histogram[j];
+    	
+    	
+    }
 }
