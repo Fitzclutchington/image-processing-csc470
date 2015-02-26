@@ -94,14 +94,11 @@ threshold_Otsu(imageP I1, imageP I2)
     for(i=0; i<MXGRAY;i++){
     	
     	class0_prob = 0;
-    	for(int j = 0; j<=i; j++){ 
-    		
-    		class0_prob += histogram[j];}
+    	for(int j = 0; j<=i; j++) class0_prob += histogram[j];
     	
     	class0_mean = 0;
         for(int j = 0; j<=i; j++) class0_mean += ((j+1) * histogram[j]);
-        class0_mean /= class0_prob;
-
+        
         numerator = (total_mean*class0_prob - class0_mean) * (total_mean*class0_prob - class0_mean);
         denominator = (class0_prob * (1 - class0_prob));
 
@@ -116,7 +113,7 @@ threshold_Otsu(imageP I1, imageP I2)
 
     
     for(i=0; i<ideal_k ; i++) lut[i] = 0;
-	for(   ; i<MXGRAY;      i++) lut[i] = 255;
+	for(   ; i<MXGRAY; i++) lut[i] = 255;
 
 	// visit all input pixels and apply lut to threshold
 	in  = I1->image;	// input  image buffer
