@@ -61,7 +61,7 @@ main(int argc, char** argv)
 void
 histo_stretch(imageP I1, int t1, int t2, imageP I2)
 {
-	int	 i, total, histogram[256];
+	int	 i, total, histogram[256], min_level, max_level;
 	uchar	*in, *out, lut[256]; 
     
 	// total number of pixels in image and total pixels in histogram
@@ -84,11 +84,31 @@ histo_stretch(imageP I1, int t1, int t2, imageP I2)
 	in  = I1->image;	// input  image buffer
 	for(i=0; i<total; i++) histogram[in[i]]++ ;
 
-	cerr << "you're ok";
+	// figure out the min and max of range for negative t1 and t2
+	max_level = 0;		
+    min_level = MXGRAY;
+    
+	if(t1 < 0) {
+		for(i=0; i<MXGRAY; i++) {
+			if(t1 < 0 && histogram[i] < min_level && histogram[i] != 0)
+				min_level = i;
+		}
+	}
+
+	else min_level = t1;
+	
+	if(t2 < 0){
+		for(i=0; i<MXGRAY; i++) {
+			if(t2 < 0 && histogram[i] > max_level && histogram[i] != 0)
+				max_level = i;
+		}
+	}
+ 	else max_level = t2;
+
 	//init lookup table
 	for(i=0; i<MXGRAY; i++){
-		if(i < t1) lut[i] = 0;
-		if(i > t2) lut[i] = 255;
+		if(i < min_level) lut[i] = 0;
+		if(i > max_level) lut[i] = 255;
 		else lut[i] = (int) MaxGray * (i - t1) / (t2 -t1);
 	}
 
