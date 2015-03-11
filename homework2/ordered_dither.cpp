@@ -1,5 +1,5 @@
 // ================================================================
-// unordered_dither.cpp - Unordered dithering program.
+// ordered_dither.cpp - ordered dithering program.
 //
 // Written by: Andrew Fitzgerald, 2015
 //				James Chou
@@ -10,7 +10,7 @@
 using namespace std;
 
 // function prototype
-void unordered_dither(imageP, int, int, imageP);
+void ordered_dither(imageP, int, float, imageP);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // main:
@@ -20,7 +20,7 @@ void unordered_dither(imageP, int, int, imageP);
 int
 main(int argc, char** argv)
 {
-	int	levels;
+	int	dither_mat_size;
 	float gamma;
 	imageP	I1, I2;
 
@@ -35,7 +35,7 @@ main(int argc, char** argv)
 	I2 = NEWIMAGE;
 
 	// read amount of quantization levels
-	levels  = atoi(argv[2]); //atoi converts strings to numbers
+	dither_mat_size  = atoi(argv[2]); //atoi converts strings to numbers
 	if(levels <= 0 or levels > 256){
 		cerr << "Usage: 0 <= levels <= 256\n";
 		exit(1);
