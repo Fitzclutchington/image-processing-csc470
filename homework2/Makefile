@@ -24,12 +24,14 @@ LIBS    = -lm   # Libraries to link with (-lm is the math library)
 COMPILE_EXECUTABLE = $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $? $(LIBS)
 
 # These are all the files to be compiled.
-ALL = unordered_dither 
+ALL = unordered_dither ordered_dither
 
 all:    $(ALL)
 
 # List of executable targets
 unordered_dither:    $($@.o) IPutil.o
+ordered_dither:    $($@.o) IPutil.o
+
 
 # Clean target to remove backup, object, and core files
 clean:
@@ -39,3 +41,4 @@ clean:
 
 # Dependencies
 unordered_dither.o: IP.h
+ordered_dither.o: IP.h

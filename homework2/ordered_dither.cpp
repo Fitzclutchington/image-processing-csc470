@@ -26,7 +26,7 @@ main(int argc, char** argv)
 
 	// error checking: proper usage
 	if(argc != 5) {
-		cerr << "Usage: unordered_dither infile levels gamma outfile\n";
+		cerr << "Usage: ordered_dither infile levels gamma outfile\n";
 		exit(1);
 	}
 
@@ -34,17 +34,18 @@ main(int argc, char** argv)
 	I1 = IP_readImage(argv[1]);
 	I2 = NEWIMAGE;
 
+
 	// read amount of quantization levels
 	dither_mat_size  = atoi(argv[2]); //atoi converts strings to numbers
-	if(levels <= 0 or levels > 256){
-		cerr << "Usage: 0 <= levels <= 256\n";
-		exit(1);
-	}
+	//if(dither_mat_size != 3 || (dither_mat_size & (dither_mat_size - 1)) != 0){
+	//	cerr << "matrix size must be 3 or a power of 2\n";
+	//	exit(1);
+	//	}
 
 	gamma = atoi(argv[3]);
 
-	// quantize image with unordered dithering and save result in file
-	unordered_dither(I1, levels, gamma, I2);
+	// quantize image with ordered dithering and save result in file
+	ordered_dither(I1, dither_mat_size, gamma, I2);
 	IP_saveImage(I2, argv[4]);
 
 	// free up image structures/memory
@@ -57,19 +58,30 @@ main(int argc, char** argv)
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// unordered_dither:
+// ordered_dither:
 //
-// Reads input file and applies unordered dither to it
-// before quantization to n levels, saves to file out
+// Reads the input in file 'in' and applies ordered dither to it, storing the output in 
+// in file 'out'. Function uses a square dither matrix ith dimensions m x m
 //
 
 void
-unordered_dither(imageP I1, int levels, int gamma, imageP I2)
+ordered_dither(imageP I1, int dither_mat_size, float gamma, imageP I2)
 {
-	int	 i, total, scale, midpoint, R;
+	int	 i, j, total,  midpoint, dith_elems, 
+	     dither_mat2[] = {0, 2, 3, 1},
+	     dither_mat3[] = {6, 8, 4, 1, 0, 3, 5, 2, 7},
+	     *dither_mat;
+	float scale;
 	uchar	*in, *out, lut[256]; //lut is an array of size 256
-
-	// total number of pixels in image
+    
+    dith_elems = dither_mat_size* dither_mat_size;
+    if(dither_mat_size == 2){
+    	dither_mat = dither_mat2;
+    }
+    else{
+    	dither_mat = dither_mat3;
+    }
+   	// total number of pixels in image
 	total = I1->width * I1->height;
 
 	// init I2 dimensions and buffer
@@ -82,18 +94,24 @@ unordered_dither(imageP I1, int levels, int gamma, imageP I2)
 	}
 
 	// init lookup table (), midpoint is a shift to have levels biased at 128
-	scale = MXGRAY / levels;
-	midpoint = scale / 2;
-	for(i=0; i<MXGRAY ; i++){ 
-		lut[i] = scale * (int) (i/scale) + midpoint;
-        cerr << (int) lut[i];}
+	scale = MXGRAY/dith_elems;
+	for(i=0; i< dith_elems ; i++){
+		dither_mat[i] = scale * dither_mat[i];
+	}
+       
 
 	// visit all input pixels and apply lut to quantization
 	in  = I1->image;	// input  image buffer
 	out = I2->image;	// output image buffer
-	for(i=0; i<total; i++){
-		R = (rand() % 33) - 16;
-		out[i] = lut[ in[i] + R ];
+	
+	for(int y=0; y<I1->height; y++){ // visit all input rows
+		for(int x=0; x<I1->width; x++){// visit all input cols
+			i = x % dither_mat_size;// dither matrix index
+			j = y % dither_mat_size;// dither matrix index
+			
+			// threshold pixel using dither value Dij(n)
+			out[y*I1->width+x] = (in[y*I1->width+x] > dither_mat[j*dither_mat_size + i])? 255 : 0;
+		}
 	}
 }
 
